@@ -1,0 +1,17 @@
+.folder {
+  flex-direction: column;
+  width: 86px;
+  height: 86px;
+  overflow: hidden;
+
+  &__icon {
+    height: 44px;
+    width: 44px;
+  }
+
+  &__text {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

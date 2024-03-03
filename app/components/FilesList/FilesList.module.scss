@@ -1,0 +1,11 @@
+.list {
+  width: 100%;
+  gap: 20px;
+  justify-content: center;
+
+  &__wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
