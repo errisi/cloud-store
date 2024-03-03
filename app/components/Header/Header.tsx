@@ -10,7 +10,9 @@ import { ThemeProvider } from "@/app/utils/ThemeProvider";
 
 export const Header = () => (
   <header className={styles.header}>
-    <Image src="./logo.svg" alt="logo" width={44} height={44} />
+    <Link href="/">
+      <Image src="./logo.svg" alt="logo" width={44} height={44} />
+    </Link>
     <h2 className={styles.header__search}>
       <ThemeProvider>
         <TextField size="small" />
