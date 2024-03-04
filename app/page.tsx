@@ -1,8 +1,7 @@
-import Image from "next/image";
-import { Folder } from "./components/Folder/Folder";
+import { Users } from "@/models/User";
 import { FilesList } from "./components/FilesList/FilesList";
 
-export default function Home() {
+export default async function Home() {
   const folders = [
     "AFSDF",
     "dfgg",
@@ -18,6 +17,10 @@ export default function Home() {
   return (
     <main>
       <FilesList files={folders} />
+
+      {/* {users.map((user: any) => (
+        <p key={user.id}>{user.email}</p>
+      ))} */}
     </main>
   );
 }

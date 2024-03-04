@@ -1,0 +1,44 @@
+const path = require("path");
+
+module.exports = {
+  config: path.resolve("database", "config/config.js"),
+  "seeders-path": path.resolve("database", "seeders"),
+  "migrations-path": path.resolve("database", "migrations"),
+};
+
+// import { DataType, Model } from "sequelize-typescript";
+// import sequelize from "@/app/db_connection";
+
+// export class Users extends Model {
+//   public id!: number;
+//   public email!: string;
+//   public password!: string;
+//   public wallpaper!: string | null;
+// }
+
+// Users.init(
+//   {
+//     id: {
+//       type: DataType.INTEGER,
+//       autoIncrement: true,
+//       primaryKey: true,
+//     },
+//     email: {
+//       type: DataType.STRING,
+//       allowNull: false,
+//     },
+//     password: {
+//       type: DataType.STRING,
+//       allowNull: false,
+//     },
+//     wallpaper: {
+//       type: DataType.STRING,
+//     },
+//   },
+//   {
+//     tableName: "users",
+//     sequelize: sequelize,
+//   }
+// );
+
+// export default Users;

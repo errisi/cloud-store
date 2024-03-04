@@ -1,4 +1,6 @@
+import { Users } from "@/models/User";
 import { NextResponse } from "next/server";
+import { connectToDb } from "../db_connection";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
