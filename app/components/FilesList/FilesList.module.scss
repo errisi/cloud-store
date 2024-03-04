@@ -1,13 +1,16 @@
 .list {
   display: flex;
   width: 100%;
+  padding: 20px 0;
   gap: 20px;
   justify-content: center;
 
   &__wrapper {
-    max-width: 1200px;
-    display: flex;
-    flex-wrap: wrap;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 86px);
+    grid-template-rows: auto;
+    justify-content: center;
     gap: 8px;
   }
 }

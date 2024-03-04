@@ -4,8 +4,13 @@ import Link from "next/link";
 import styles from "./Header.module.scss";
 import Image from "next/image";
 import SearchIcon from "@mui/icons-material/Search";
-import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
-import { TextField, IconButton } from "@mui/material";
+import SettingsIcon from "@mui/icons-material/Settings";
+import {
+  IconButton,
+  FormControl,
+  InputAdornment,
+  OutlinedInput,
+} from "@mui/material";
 import { ThemeProvider } from "@/app/utils/ThemeProvider";
 
 export const Header = () => (
@@ -15,7 +20,18 @@ export const Header = () => (
     </Link>
     <h2 className={styles.header__search}>
       <ThemeProvider>
-        <TextField size="small" />
+        <FormControl size="small" fullWidth className={styles.header__search}>
+          <OutlinedInput
+            id="standard-adornment-password"
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton>
+                  <SearchIcon />
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+        </FormControl>
       </ThemeProvider>
     </h2>
     <nav className={styles.nav}>
@@ -23,14 +39,7 @@ export const Header = () => (
         <li>
           <ThemeProvider>
             <IconButton>
-              <SearchIcon />
-            </IconButton>
-          </ThemeProvider>
-        </li>
-        <li>
-          <ThemeProvider>
-            <IconButton>
-              <AccountCircleTwoToneIcon />
+              <SettingsIcon />
             </IconButton>
           </ThemeProvider>
         </li>
