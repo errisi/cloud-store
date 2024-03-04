@@ -1,5 +1,8 @@
 import { connectToDb } from "@/app/db_connection";
 import { NextResponse } from "next/server";
+import { Users } from "@/app/models/user.model";
+import { jwtService } from "@/app/services/jwt.service";
+import { tokenService } from "@/app/services/token.service";
 
 export async function GET(req: Request) {
   const sequelize = await connectToDb();
@@ -8,37 +11,48 @@ export async function GET(req: Request) {
   return NextResponse.json({ users });
 }
 
-export async function POST(req: Request) {
+export const generateTokens = async (user: Users) => {
   const sequelize = await connectToDb();
-  const { email, password, wallpaper } = await req.json();
+  const userFromDb =
+    ((await sequelize.models.Users.findByPk(user.id)) as Users) || user;
 
-  const isUserValid = () => {
-    if (
-      !email ||
-      email.trim().length <= 0 ||
-      typeof email !== "string" ||
-      !password ||
-      password.trim().length <= 0 ||
-      typeof password !== "string"
-    ) {
-      return false;
-    }
-
-    return true;
+  const normalizedUser = {
+    id: userFromDb.id,
+    email: userFromDb.email,
+    password: userFromDb.password,
+    wallpaper: userFromDb.wallpaper,
+    activationToken: userFromDb.activationToken,
   };
 
-  if (!isUserValid()) {
-    return NextResponse.json(
-      { error: "Invalid email or password" },
-      { status: 422 }
-    );
+  const accessToken = jwtService.sign(normalizedUser);
+  const refreshToken = jwtService.signRefresh(normalizedUser);
+
+  if (typeof normalizedUser.id !== "number") {
+    return NextResponse.json({ error: "id is NaN" }, { status: 400 });
   }
 
-  const newUsers = await sequelize.models.Users.create({
-    email,
-    password,
-    wallpaper: wallpaper ? wallpaper : null,
-  });
+  await tokenService.save(normalizedUser.id!, refreshToken);
 
-  return NextResponse.json({ newUsers });
-}
+  const cookieHeader = `refreshToken=${refreshToken}; Max-Age=${
+    30 * 24 * 60 * 60
+  }; HttpOnly; SameSite=None; Secure`;
+
+  const response = new NextResponse(
+    JSON.stringify(
+      {
+        user: normalizedUser,
+        accessToken,
+      },
+      null,
+      2
+    ),
+    {
+      status: 200,
+      headers: {
+        "Set-Cookie": cookieHeader,
+      },
+    }
+  );
+
+  return response;
+};

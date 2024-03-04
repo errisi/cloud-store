@@ -39,5 +39,10 @@ export class Users extends Model {
     type: DataType.STRING,
   })
   wallpaper!: string;
-}
 
+  
+  @Column({
+    type: DataType.STRING,
+  })
+  activationToken!: string | null;
+}

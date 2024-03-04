@@ -24,6 +24,9 @@ module.exports = {
       wallpaper: {
         type: Sequelize.STRING,
       },
+      activationToken: {
+        type: Sequelize.STRING,
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,

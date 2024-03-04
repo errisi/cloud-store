@@ -1,6 +1,7 @@
-import { Users } from "@/models/User";
+import { Users } from "@/app/models/user.model";
 import { Sequelize } from "sequelize-typescript";
 import * as pg from "pg";
+import { Tokens } from "./models/token.model";
 
 export const connectToDb = async () => {
   const DB_NAME = process.env.POSTGRES_DATABASE;
@@ -16,13 +17,16 @@ export const connectToDb = async () => {
   const DB_URI = `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`;
 
   const sequelize = new Sequelize(DB_URI, {
-    models: [Users],
+    models: [Users, Tokens],
     dialect: "postgres",
     dialectOptions: {
       ssl: true,
     },
     dialectModule: pg,
   });
+
+  Tokens.belongsTo(Users, { foreignKey: 'userId' });
+  Users.hasOne(Tokens, { foreignKey: 'userId' });
 
   try {
     await sequelize.authenticate();

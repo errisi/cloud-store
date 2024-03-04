@@ -1,4 +1,4 @@
-import { Users } from "@/models/User";
+import { Users } from "@/app/models/user.model";
 import { FilesList } from "./components/FilesList/FilesList";
 
 export default async function Home() {
