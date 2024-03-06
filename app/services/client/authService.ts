@@ -1,8 +1,7 @@
 import { authClient } from "../../http/authClient";
 
-async function register(name: string, email: string, password: string) {
+async function register(email: string, password: string) {
   return authClient.post("/users/register", {
-    name,
     email,
     password,
   });

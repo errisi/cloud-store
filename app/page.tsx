@@ -1,7 +1,14 @@
+"use client";
+
 import { Users } from "@/app/models/user.model";
 import { FilesList } from "./components/FilesList/FilesList";
+import * as UserActions from "@/app/store/reducers/User";
+import { useAppDispatch, useAppSelector } from "./store/hooks";
+import { useEffect, useState } from "react";
+import { Alert, Snackbar } from "@mui/material";
+import { Welcome } from "./components/Welcome/Welcome";
 
-export default async function Home() {
+export default function Home() {
   const folders = [
     "AFSDF",
     "dfgg",
@@ -14,13 +21,42 @@ export default async function Home() {
     "asd",
   ];
 
+  const dispatch = useAppDispatch();
+
+  const [isActovationSnackbarOpen, setIsActovationSnackbarOpen] =
+    useState(false);
+
+  const { user } = useAppSelector((state) => state.User);
+
+  useEffect(() => {
+    if (!user) {
+      dispatch(UserActions.checkAuth());
+    }
+
+    if (user && user.activationToken) {
+      setIsActovationSnackbarOpen(true);
+    }
+  }, [user, dispatch])
+
   return (
     <main>
-      <FilesList files={folders} />
+      {!!user && (
+        <>
+          <FilesList files={folders} />
 
-      {/* {users.map((user: any) => (
-        <p key={user.id}>{user.email}</p>
-      ))} */}
+          <Snackbar
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            open={isActovationSnackbarOpen}
+            onClose={() => setIsActovationSnackbarOpen(false)}
+          >
+            <Alert severity="error" sx={{ width: "100%" }}>
+              Your email has not yet been activated
+            </Alert>
+          </Snackbar>
+        </>
+      )}
+
+      {!user && <Welcome />}
     </main>
   );
 }

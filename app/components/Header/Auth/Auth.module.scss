@@ -1,0 +1,68 @@
+.header {
+  &__auth {
+    position: fixed;
+    top: 500px;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+    width: fit-content;
+    height: fit-content;
+    background-color: #000;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #000;
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &__error {
+      color:  #fff;
+      border: 1px solid  #fff;
+      padding: 0 8px;
+      border-left: none;
+      border-right: none;
+    }
+
+    &__form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    &__under {
+      position: fixed;
+      width: 100%;
+      height: 200%;
+      opacity: 50%;
+      z-index: 59;
+      background-color: #000;
+    }
+
+    &__title {
+      padding-top: 16px;
+      margin-bottom: 8px;
+    }
+
+    &__close {
+      position: absolute !important;
+      top: 12px;
+      right: 6px;
+    }
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+      width: 300px;
+      gap: 16px;
+      padding: 16px;
+
+      &__buttons {
+        max-width: 300px;
+        padding: 16px;
+      }
+    }
+  }
+}
+
