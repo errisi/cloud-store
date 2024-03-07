@@ -24,7 +24,7 @@ module.exports = {
       files: {
         type: Sequelize.ARRAY(Sequelize.STRING),
       },
-      owderId: {
+      ownerId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {

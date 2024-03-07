@@ -7,12 +7,14 @@ import { ThemeProvider } from "@/app/utils/ThemeProvider";
 import styles from "./Folder.module.scss";
 import Link from "next/link";
 
-export const Folder: FC<{ title: string }> = ({ title }) => (
+export const Folder: FC<{
+  title: string;
+  onPathChange: (title: string) => void;
+}> = ({ title, onPathChange }) => (
   <ThemeProvider>
     <Button
       size="large"
-      component={Link}
-      href={`/${title}`}
+      onClick={() => onPathChange(title)}
       className={styles.folder}
       sx={{ textTransform: "none" }}
     >

@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { useEffect, useState } from "react";
 import { Alert, Snackbar } from "@mui/material";
 import { Welcome } from "./components/Welcome/Welcome";
+import { redirect } from "next/navigation";
 
 export default function Home() {
   const folders = [
@@ -36,14 +37,16 @@ export default function Home() {
     if (user && user.activationToken) {
       setIsActovationSnackbarOpen(true);
     }
-  }, [user, dispatch])
+
+    if (user) {
+      redirect("/files");
+    }
+  }, [user, dispatch]);
 
   return (
     <main>
       {!!user && (
         <>
-          <FilesList files={folders} />
-
           <Snackbar
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
             open={isActovationSnackbarOpen}

@@ -46,5 +46,5 @@ export class Folders extends Model {
   @Column({
     type: DataType.INTEGER,
   })
-  owderId!: number;
+  ownerId!: number;
 }
