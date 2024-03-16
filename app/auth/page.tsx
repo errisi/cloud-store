@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import styles from "./Auth.module.scss";
+import styles from "./page.module.scss";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import CloseIcon from "@mui/icons-material/Close";
 import {
   IconButton,
   FormControl,
@@ -16,35 +15,51 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { FC, FormEvent, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import * as UserActions from "@/app/store/reducers/User";
+import { authService } from "@/app/services/client/authService";
+import { useRouter } from 'next/navigation';
 
-type Props = {
-  email: string;
-  password: string;
-  setEmail: React.Dispatch<React.SetStateAction<string>>;
-  setPassword: React.Dispatch<React.SetStateAction<string>>;
-  setIsAuthMenuOpened: React.Dispatch<React.SetStateAction<boolean>>;
-  error: string;
-  handleAuth: (
-    e: FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
-  ) => Promise<void>;
-  handleRegister: (
-    e: FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
-  ) => Promise<void>;
-};
+const Auth: FC = () => {
+  const dispatch = useAppDispatch();
 
-export const Auth: FC<Props> = ({
-  email,
-  password,
-  setEmail,
-  setPassword,
-  error,
-  setIsAuthMenuOpened,
-  handleAuth,
-  handleRegister,
-}) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [registerError, setRegisterError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const { error } = useAppSelector((state) => state.User);
+
+  const { push } = useRouter();
+
+  const handleRegister = async (
+    e: FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.preventDefault();
+    try {
+      await authService.register(email, password);
+
+      await dispatch(UserActions.init({ email, password }));
+      dispatch(UserActions.checkAuth());
+      setRegisterError("");
+      push('/');
+    } catch (error) {
+      setRegisterError(`${(error as any).response.data.message}`);
+    }
+  };
+
+  const handleAuth = async (
+    e: FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.preventDefault();
+    const result = await dispatch(UserActions.init({ email, password }));
+
+    if (!(result as any).error) {
+      push('/');
+    }
+  };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -106,17 +121,11 @@ export const Auth: FC<Props> = ({
   return (
     <>
       <div className={styles.header__auth}>
-        <IconButton
-          onClick={() => setIsAuthMenuOpened((c) => !c)}
-          className={styles.header__auth__close}
-        >
-          <CloseIcon color="primary" />
-        </IconButton>
         <form
           className={styles.header__auth__form}
           onSubmit={(e) => handleAuth(e)}
         >
-          <h2 className={styles.header__auth__title}>Авторизация</h2>
+          <h2 className={styles.header__auth__title}>Authorization</h2>
           {error === "ERR_BAD_REQUEST" && (
             <p className={styles.header__auth__error}>
               Wrong login or password
@@ -170,11 +179,7 @@ export const Auth: FC<Props> = ({
               )}
             </FormControl>
           </div>
-          <Link
-            href="/reset"
-            onClick={() => setIsAuthMenuOpened(false)}
-            className="forgot"
-          >
+          <Link href="/reset" className="forgot">
             <p>Forgot password?</p>
           </Link>
 
@@ -203,3 +208,5 @@ export const Auth: FC<Props> = ({
     </>
   );
 };
+
+export default Auth;

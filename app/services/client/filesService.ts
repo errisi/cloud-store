@@ -10,7 +10,7 @@ async function post(title: string, path: string, ownerId: number) {
   return apiClient.post("/files/create", { title, path, ownerId });
 }
 
-export const foldersService = {
+export const filesService = {
   get,
   post
 };

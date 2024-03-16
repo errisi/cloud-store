@@ -2,7 +2,7 @@
 
 // npm run migration:create -- --name create-users-table
 
-const TABLE_NAME = "folders";
+const TABLE_NAME = "files";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -13,6 +13,10 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true,
       },
+      type: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       title: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -21,8 +25,12 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      files: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
+      content: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      url: {
+        type: Sequelize.STRING,
       },
       ownerId: {
         type: Sequelize.INTEGER,

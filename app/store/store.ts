@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import UserReducer from "./reducers/User";
-import FoldersReducer from "./reducers/Folders";
+import FoldersReducer from "./reducers/Files";
 
 const store = configureStore({
   reducer: {

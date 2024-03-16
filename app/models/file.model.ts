@@ -12,10 +12,10 @@ import {
 import { Users } from "./user.model";
 
 @Table({
-  tableName: "folders",
+  tableName: "files",
   timestamps: true,
 })
-export class Folders extends Model {
+export class Files extends Model {
   @AutoIncrement
   @AllowNull(false)
   @PrimaryKey
@@ -23,6 +23,12 @@ export class Folders extends Model {
     type: DataType.INTEGER,
   })
   id!: number;
+
+  @AllowNull(false)
+  @Column({
+    type: DataType.STRING,
+  })
+  type!: string;
 
   @AllowNull(false)
   @Column({
@@ -36,10 +42,16 @@ export class Folders extends Model {
   })
   path!: string;
 
+  @AllowNull(false)
   @Column({
-    type: DataType.ARRAY(DataType.STRING),
+    type: DataType.STRING,
   })
-  files!: string[];
+  content!: string;
+
+  @Column({
+    type: DataType.STRING,
+  })
+  url!: string | null;
 
   @ForeignKey(() => Users)
   @AllowNull(false)

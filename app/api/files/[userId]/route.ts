@@ -1,5 +1,5 @@
 import { connectToDb } from "@/app/db_connection";
-import { Folders } from "@/app/models/folder.model";
+import { Files } from "@/app/models/file.model";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request, context: any) {
@@ -9,12 +9,14 @@ export async function POST(req: Request, context: any) {
   const id = Number(idParams);
   const { path } = await req.json();
 
-  console.log([path, id])
+  console.log([path, id]);
 
-  const folders = (await sequelize.models.Folders.findAll({ where: { path, ownerId: id } })) as Folders[];
+  const folders = (await sequelize.models.Files.findAll({
+    where: { path, ownerId: id },
+  })) as Files[];
 
   if (!folders.length) {
-    return  NextResponse.json({ folders: [] });
+    return NextResponse.json({ folders: [] });
   }
 
   return NextResponse.json({ folders });

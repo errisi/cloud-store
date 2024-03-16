@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { Alert, Snackbar } from "@mui/material";
 import { Welcome } from "./components/Welcome/Welcome";
 import { redirect } from "next/navigation";
+import { Preloader } from "./components/Preloader/Preloader";
 
 export default function Home() {
   const folders = [
@@ -27,7 +28,7 @@ export default function Home() {
   const [isActovationSnackbarOpen, setIsActovationSnackbarOpen] =
     useState(false);
 
-  const { user } = useAppSelector((state) => state.User);
+  const { user, loading } = useAppSelector((state) => state.User);
 
   useEffect(() => {
     if (!user) {
@@ -45,7 +46,9 @@ export default function Home() {
 
   return (
     <main>
-      {!!user && (
+      {!!loading && <Preloader />}
+
+      {!!user && !loading && (
         <>
           <Snackbar
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
@@ -59,7 +62,7 @@ export default function Home() {
         </>
       )}
 
-      {!user && <Welcome />}
+      {!user && !loading && <Welcome />}
     </main>
   );
 }

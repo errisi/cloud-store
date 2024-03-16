@@ -3,67 +3,29 @@
 import Link from "next/link";
 import styles from "./Header.module.scss";
 import Image from "next/image";
-import SearchIcon from "@mui/icons-material/Search";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import CloseIcon from "@mui/icons-material/Close";
-import {
-  IconButton,
-  FormControl,
-  InputAdornment,
-  OutlinedInput,
-  Input,
-  ButtonGroup,
-  Button,
-  TextField,
-  InputLabel,
-  FormHelperText,
-} from "@mui/material";
+import StarsIcon from "@mui/icons-material/Stars";
+import { IconButton, Button, Collapse } from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { ThemeProvider } from "@/app/utils/ThemeProvider";
-import { FormEvent, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
+import { useState } from "react";
 import * as UserActions from "@/app/store/reducers/User";
-import { authService } from "@/app/services/client/authService";
-import { Auth } from "./Auth/Auth";
+import { useRouter } from "next/navigation";
 
 export const Header = () => {
+  const { user } = useAppSelector((state) => state.User);
+
+  const [isSettingsOpened, setIsSettingsOpened] = useState(false);
+
   const dispatch = useAppDispatch();
-  const [isAuthMenuOpened, setIsAuthMenuOpened] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [registerError, setRegisterError] = useState("");
 
-  const { user, error } = useAppSelector((state) => state.User);
+  const { push } = useRouter();
 
-  const handleAuthMenuOpen = () => {
-    setIsAuthMenuOpened(true);
-  };
-
-  const handleRegister = async (
-    e: FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
-  ) => {
-    e.preventDefault();
-    try {
-      await authService.register(email, password);
-
-      await dispatch(UserActions.init({ email, password }));
-      dispatch(UserActions.checkAuth());
-      setIsAuthMenuOpened(false);
-      setRegisterError("");
-    } catch (error) {
-      setRegisterError(`${(error as any).response.data.message}`);
-    }
-  };
-
-  const handleAuth = async (
-    e: FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
-  ) => {
-    e.preventDefault();
-    const result = await dispatch(UserActions.init({ email, password }));
-
-    if (!(result as any).error) {
-      setIsAuthMenuOpened(false);
-    }
+  const handleLogout = async () => {
+    await dispatch(UserActions.logout());
+    setIsSettingsOpened(false);
+    push("/");
   };
 
   return (
@@ -71,40 +33,37 @@ export const Header = () => {
       <Link href="/">
         <Image src="./logo.svg" alt="logo" width={44} height={44} />
       </Link>
-      {!!user && (
-        <h2 className={styles.header__search}>
-          <ThemeProvider>
-            <FormControl
-              size="small"
-              fullWidth
-              className={styles.header__search}
-            >
-              <OutlinedInput
-                id="standard-adornment-password"
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton>
-                      <SearchIcon />
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-            </FormControl>
-          </ThemeProvider>
-        </h2>
-      )}
       <nav className={styles.nav}>
         <ul className={styles.nav__list}>
           <li>
             <ThemeProvider>
               {!!user && (
-                <IconButton>
-                  <SettingsIcon />
-                </IconButton>
+                <>
+                  <IconButton onClick={() => setIsSettingsOpened((c) => !c)}>
+                    <SettingsIcon />
+                  </IconButton>
+
+                  <Collapse
+                    in={isSettingsOpened}
+                    sx={{ position: "absolute", right: 0 }}
+                    onBlur={() => setIsSettingsOpened(false)}
+                  >
+                    <div
+                      onClick={() => setIsSettingsOpened(false)}
+                      className={styles.settings__close}
+                    />
+                    <div className={styles.settings}>
+                      <Button startIcon={<LogoutIcon />} onClick={handleLogout}>
+                        Logout
+                      </Button>
+                      <Button startIcon={<StarsIcon />}>Subscription</Button>
+                    </div>
+                  </Collapse>
+                </>
               )}
 
               {!user && (
-                <Button variant="contained" onClick={handleAuthMenuOpen}>
+                <Button variant="contained" component={Link} href="/auth">
                   Authorization
                 </Button>
               )}
@@ -112,19 +71,6 @@ export const Header = () => {
           </li>
         </ul>
       </nav>
-
-      {isAuthMenuOpened && (
-        <Auth
-          email={email}
-          password={password}
-          setEmail={setEmail}
-          setPassword={setPassword}
-          error={error || registerError}
-          setIsAuthMenuOpened={setIsAuthMenuOpened}
-          handleAuth={handleAuth}
-          handleRegister={handleRegister}
-        />
-      )}
     </header>
   );
 };

@@ -29,9 +29,12 @@ export async function POST(req: Request) {
     );
   }
 
-  const newFolder = await sequelize.models.Folders.create({
+  const newFolder = await sequelize.models.Files.create({
+    type: "folder",
     title,
     path,
+    content: "",
+    url: null,
     ownerId,
   });
 
