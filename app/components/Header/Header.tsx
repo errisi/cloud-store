@@ -9,12 +9,13 @@ import { IconButton, Button, Collapse } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { ThemeProvider } from "@/app/utils/ThemeProvider";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as UserActions from "@/app/store/reducers/User";
 import { useRouter } from "next/navigation";
+import { Container } from "../Container/Container";
 
 export const Header = () => {
-  const { user } = useAppSelector((state) => state.User);
+  const { user, loading } = useAppSelector((state) => state.User);
 
   const [isSettingsOpened, setIsSettingsOpened] = useState(false);
 
@@ -28,49 +29,67 @@ export const Header = () => {
     push("/");
   };
 
+  useEffect(() => {
+    if (!user) {
+      dispatch(UserActions.checkAuth());
+    }
+  }, [user, dispatch]);
+
   return (
     <header className={styles.header}>
-      <Link href="/">
-        <Image src="./logo.svg" alt="logo" width={44} height={44} />
-      </Link>
-      <nav className={styles.nav}>
-        <ul className={styles.nav__list}>
-          <li>
-            <ThemeProvider>
-              {!!user && (
-                <>
-                  <IconButton onClick={() => setIsSettingsOpened((c) => !c)}>
-                    <SettingsIcon />
-                  </IconButton>
+      <Container>
+        <div className={styles.header__content}>
+          <Link href="/">
+            <Image src="./logo.svg" alt="logo" width={44} height={44} />
+          </Link>
+          <nav className={styles.nav}>
+            <ul className={styles.nav__list}>
+              <li>
+                <ThemeProvider>
+                  {!!user && (
+                    <>
+                      <IconButton
+                        onClick={() => setIsSettingsOpened((c) => !c)}
+                      >
+                        <SettingsIcon />
+                      </IconButton>
 
-                  <Collapse
-                    in={isSettingsOpened}
-                    sx={{ position: "absolute", right: 0 }}
-                    onBlur={() => setIsSettingsOpened(false)}
-                  >
-                    <div
-                      onClick={() => setIsSettingsOpened(false)}
-                      className={styles.settings__close}
-                    />
-                    <div className={styles.settings}>
-                      <Button startIcon={<LogoutIcon />} onClick={handleLogout}>
-                        Logout
-                      </Button>
-                      <Button startIcon={<StarsIcon />}>Subscription</Button>
-                    </div>
-                  </Collapse>
-                </>
-              )}
+                      <Collapse
+                        in={isSettingsOpened}
+                        sx={{ position: "absolute", right: 0 }}
+                        onBlur={() => setIsSettingsOpened(false)}
+                        className={styles.sett}
+                      >
+                        <div
+                          onClick={() => setIsSettingsOpened(false)}
+                          className={styles.settings__close}
+                        />
+                        <div className={styles.settings}>
+                          <Button
+                            startIcon={<LogoutIcon />}
+                            onClick={handleLogout}
+                          >
+                            Logout
+                          </Button>
+                          <Button startIcon={<StarsIcon />}>
+                            Subscription
+                          </Button>
+                        </div>
+                      </Collapse>
+                    </>
+                  )}
 
-              {!user && (
-                <Button variant="contained" component={Link} href="/auth">
-                  Authorization
-                </Button>
-              )}
-            </ThemeProvider>
-          </li>
-        </ul>
-      </nav>
+                  {!user && (
+                    <Button variant="contained" component={Link} href="/auth">
+                      Authorization
+                    </Button>
+                  )}
+                </ThemeProvider>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </Container>
     </header>
   );
 };

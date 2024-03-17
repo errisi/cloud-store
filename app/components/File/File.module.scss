@@ -1,0 +1,39 @@
+.folder {
+  flex-direction: column;
+  width: 86px;
+  height: 86px;
+  overflow: hidden;
+  justify-content: center;
+  text-align: center;
+
+  &__icon {
+    height: 44px;
+    width: 44px;
+  }
+
+  &__text {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__select {
+    background-color: #ffffff10;
+    border: 1px solid #ffffff80;
+
+    &:hover,
+    &:active {
+      background-color: #ffffff10;
+    }
+
+    &__true {
+      background-color: #ffffff40;
+      border: 1px solid #ffffff80;
+
+      &:hover,
+      &:active {
+        background-color: #ffffff40;
+      }
+    }
+  }
+}

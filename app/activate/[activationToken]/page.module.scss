@@ -1,0 +1,28 @@
+.content {
+  padding-top: 16px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__block {
+    max-width: 800px;
+    font-size: 1.1rem;
+
+    &__error {
+      background-color: rgb(22, 11, 11);
+      color: #f06292;
+      padding: 16px;
+      border-radius: 10px;
+      border: 1px solid #f06292;
+    }
+
+    &__success {
+      background-color: rgb(12, 19, 13);
+      padding: 16px;
+      border-radius: 10px;
+      border: 1px solid rgb(204, 232, 205);
+      color: rgb(204, 232, 205);
+    }
+  }
+}

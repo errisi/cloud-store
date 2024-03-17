@@ -1,4 +1,14 @@
 .tools {
   display: flex;
   justify-content: space-between;
+  border-bottom: 1px solid #fff;
+  align-items: center;
+}
+
+.mb16 {
+  margin-bottom: 16px;
+}
+
+.pl16 {
+  padding-left: 16px;
 }

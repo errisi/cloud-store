@@ -31,10 +31,6 @@ export default function Home() {
   const { user, loading } = useAppSelector((state) => state.User);
 
   useEffect(() => {
-    if (!user) {
-      dispatch(UserActions.checkAuth());
-    }
-
     if (user && user.activationToken) {
       setIsActovationSnackbarOpen(true);
     }

@@ -18,7 +18,8 @@ import { FC, FormEvent, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import * as UserActions from "@/app/store/reducers/User";
 import { authService } from "@/app/services/client/authService";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
+import { Preloader } from "../components/Preloader/Preloader";
 
 const Auth: FC = () => {
   const dispatch = useAppDispatch();
@@ -30,7 +31,7 @@ const Auth: FC = () => {
   const [registerError, setRegisterError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const { error } = useAppSelector((state) => state.User);
+  const { error, loading } = useAppSelector((state) => state.User);
 
   const { push } = useRouter();
 
@@ -44,7 +45,7 @@ const Auth: FC = () => {
       await dispatch(UserActions.init({ email, password }));
       dispatch(UserActions.checkAuth());
       setRegisterError("");
-      push('/');
+      push("/");
     } catch (error) {
       setRegisterError(`${(error as any).response.data.message}`);
     }
@@ -57,7 +58,7 @@ const Auth: FC = () => {
     const result = await dispatch(UserActions.init({ email, password }));
 
     if (!(result as any).error) {
-      push('/');
+      push("/");
     }
   };
 
@@ -120,91 +121,95 @@ const Auth: FC = () => {
 
   return (
     <>
-      <div className={styles.header__auth}>
-        <form
-          className={styles.header__auth__form}
-          onSubmit={(e) => handleAuth(e)}
-        >
-          <h2 className={styles.header__auth__title}>Authorization</h2>
-          {error === "ERR_BAD_REQUEST" && (
-            <p className={styles.header__auth__error}>
-              Wrong login or password
-            </p>
-          )}
-          <div className={styles.header__auth__content}>
-            <TextField
-              required
-              id="outlined-email-input"
-              label="Enter email"
-              type="email"
-              autoComplete="current-email"
-              value={email}
-              error={!!emailError}
-              helperText={emailError}
-              name="email"
-              onBlur={(e) => handleOnBlur(e)}
-              onChange={handleEmailChange}
-            />
-            <FormControl variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-password">
-                Enter password
-              </InputLabel>
-              <OutlinedInput
-                id="outlined-adornment-password"
-                required
-                type={showPassword ? "text" : "password"}
-                name="password"
-                onBlur={(e) => handleOnBlur(e)}
-                label="Enter password"
-                value={password}
-                onChange={(e) => handlePasswordChange(e)}
-                error={!!passwordError}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-              {!!passwordError && (
-                <FormHelperText error id="username-error">
-                  {passwordError}
-                </FormHelperText>
-              )}
-            </FormControl>
-          </div>
-          <Link href="/reset" className="forgot">
-            <p>Forgot password?</p>
-          </Link>
-
-          <ButtonGroup
-            fullWidth
-            className={styles.header__auth__content__buttons}
-            size="medium"
+      {!loading && (
+        <div className={styles.header__auth}>
+          <form
+            className={styles.header__auth__form}
+            onSubmit={(e) => handleAuth(e)}
           >
-            <Button
-              variant="outlined"
-              onClick={handleRegister}
-              disabled={!!emailError || !!passwordError}
+            <h2 className={styles.header__auth__title}>Authorization</h2>
+            {error === "ERR_BAD_REQUEST" && (
+              <p className={styles.header__auth__error}>
+                Wrong login or password
+              </p>
+            )}
+            <div className={styles.header__auth__content}>
+              <TextField
+                required
+                id="outlined-email-input"
+                label="Enter email"
+                type="email"
+                autoComplete="current-email"
+                value={email}
+                error={!!emailError}
+                helperText={emailError}
+                name="email"
+                onBlur={(e) => handleOnBlur(e)}
+                onChange={handleEmailChange}
+              />
+              <FormControl variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-password">
+                  Enter password
+                </InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  required
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  onBlur={(e) => handleOnBlur(e)}
+                  label="Enter password"
+                  value={password}
+                  onChange={(e) => handlePasswordChange(e)}
+                  error={!!passwordError}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+                {!!passwordError && (
+                  <FormHelperText error id="username-error">
+                    {passwordError}
+                  </FormHelperText>
+                )}
+              </FormControl>
+            </div>
+            <Link href="/reset" className="forgot">
+              <p>Forgot password?</p>
+            </Link>
+
+            <ButtonGroup
+              fullWidth
+              className={styles.header__auth__content__buttons}
+              size="medium"
             >
-              Sign up
-            </Button>
-            <Button
-              variant="contained"
-              onClick={handleAuth}
-              disabled={!!emailError}
-            >
-              Sign in
-            </Button>
-          </ButtonGroup>
-        </form>
-      </div>
+              <Button
+                variant="outlined"
+                onClick={handleRegister}
+                disabled={!!emailError || !!passwordError}
+              >
+                Sign up
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handleAuth}
+                disabled={!!emailError}
+              >
+                Sign in
+              </Button>
+            </ButtonGroup>
+          </form>
+        </div>
+      )}
+
+      {!!loading && <Preloader />}
     </>
   );
 };
