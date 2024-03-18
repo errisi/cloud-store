@@ -6,7 +6,6 @@ import { Dispatch, FC, SetStateAction } from "react";
 import { ThemeProvider } from "@/app/utils/ThemeProvider";
 import styles from "./File.module.scss";
 import { Files } from "@/app/models/file.model";
-import cn from "classnames";
 import { Action } from "@/app/types/Actions";
 
 export const Folder: FC<{

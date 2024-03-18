@@ -2,12 +2,13 @@ import { connectToDb } from "@/app/db_connection";
 import { Files } from "@/app/models/file.model";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request, context: any) {
+export async function GET(req: Request, context: any) {
   const sequelize = await connectToDb();
   const { params } = context;
   const { userId: idParams } = params;
   const id = Number(idParams);
-  const { path } = await req.json();
+  const { searchParams } = new URL(req.url);
+  const path = searchParams.get("path");
 
   console.log([path, id]);
 
