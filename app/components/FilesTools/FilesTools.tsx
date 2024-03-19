@@ -1,6 +1,6 @@
 import { Dispatch, FC, SetStateAction, useState } from "react";
 import styles from "./FilesTools.module.scss";
-import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
+import DriveFileMoveIcon from "@mui/icons-material/DriveFileMove";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -28,7 +28,17 @@ export const FilesTools: FC<{
   setAction: Dispatch<SetStateAction<Action | null>>;
   selectedFiles: Files[];
   setSelectedFiles: Dispatch<SetStateAction<Files[]>>;
-}> = ({ onGoBack, setAction, selectedFiles, action, setSelectedFiles }) => {
+  multiSelectCondition: boolean;
+  upload: (formData: FormData) => Promise<void>;
+}> = ({
+  onGoBack,
+  setAction,
+  selectedFiles,
+  action,
+  setSelectedFiles,
+  multiSelectCondition,
+  upload,
+}) => {
   const handleActionsClose = () => {
     setSelectedFiles([]);
     setAction(null);
@@ -56,14 +66,27 @@ export const FilesTools: FC<{
           <IconButton onClick={() => setAction(Action.Add)}>
             <CreateNewFolderIcon />
           </IconButton>
-          <IconButton onClick={() => setAction(Action.Upload)}>
-            <CloudUploadIcon />
-          </IconButton>
+          {/* <IconButton onClick={() => setAction(Action.Move)}>
+            <DriveFileMoveIcon />
+          </IconButton> */}
+          <form action={upload} className={styles.upload}>
+            <input
+              accept="image/*"
+              style={{ display: "none" }}
+              id="raised-button-file"
+              multiple
+              type="file"
+              name="file"
+              onChange={(e) => e.target.form?.requestSubmit()}
+            />
+            <label htmlFor="raised-button-file">
+              <IconButton component="span">
+                <CloudUploadIcon />
+              </IconButton>
+            </label>
+          </form>
           <IconButton onClick={() => setAction(Action.Download)}>
             <DownloadIcon />
-          </IconButton>
-          <IconButton onClick={() => setAction(Action.Rename)}>
-            <DriveFileRenameOutlineIcon />
           </IconButton>
           <IconButton onClick={() => setAction(Action.Share)}>
             <ShareIcon />
@@ -74,9 +97,11 @@ export const FilesTools: FC<{
         </div>
       </div>
 
-      <Collapse in={!!action}>
+      <Collapse in={multiSelectCondition}>
         <div className={`${styles.tools} ${styles.mb16}`}>
-          <p className={styles.pl16}>{`Selected ${selectedFiles.length} files`}</p>
+          <p
+            className={styles.pl16}
+          >{`Selected ${selectedFiles.length} files`}</p>
 
           <IconButton onClick={handleActionsClose}>
             <CloseIcon />

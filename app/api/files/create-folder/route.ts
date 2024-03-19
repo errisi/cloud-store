@@ -5,6 +5,17 @@ export async function POST(req: Request) {
   const sequelize = await connectToDb();
   const { title, path, ownerId } = await req.json();
 
+  const sameFolder = await sequelize.models.Files.findOne({
+    where: { title, path, ownerId },
+  });
+
+  if (sameFolder) {
+    return NextResponse.json(
+      { error: "A folder with the same name already exists" },
+      { status: 409 }
+    );
+  }
+
   const isFolderValid = () => {
     if (
       !title ||

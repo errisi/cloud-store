@@ -2,7 +2,7 @@ export enum Action {
   Add = "add",
   Upload = "upload",
   Download = "download",
-  Rename = "rename",
+  Move = "move",
   Share = "share",
   Delete = "delete",
 }

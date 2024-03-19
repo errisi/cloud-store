@@ -4,7 +4,39 @@
 }
 
 .apply {
-  position: absolute;
+  position: fixed;
   bottom: 16px;
   right: 12px;
+}
+
+.createFolder {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.uploadFile {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+
+  width: 200px;
+  height: 120px;
+  background-color: #0000009a;
+  border-radius: 10px;
+  border: 1px solid #fff;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+
+  &__choose {
+    display: flex;
+    flex-direction: column;
+  }
 }

@@ -20,7 +20,7 @@ async function uploadFileToS3(file: any) {
     Bucket: process.env.AWS_BUCKET_NAME,
     Key: fileName,
     Body: fileBuffer,
-    ContentType: file.type,
+    ContentType: "application/octet-stream",
   };
 
   const command = new PutObjectCommand(params);

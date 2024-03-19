@@ -11,52 +11,17 @@ import { redirect } from "next/navigation";
 import { Preloader } from "./components/Preloader/Preloader";
 
 export default function Home() {
-  const folders = [
-    "AFSDF",
-    "dfgg",
-    "dfgdd",
-    "dfsfsdfsdfggddddd",
-    "dfgg",
-    "gggg",
-    "dgdfgd",
-    "fghghf",
-    "asd",
-  ];
-
-  const dispatch = useAppDispatch();
-
-  const [isActovationSnackbarOpen, setIsActovationSnackbarOpen] =
-    useState(false);
-
   const { user, loading } = useAppSelector((state) => state.User);
 
   useEffect(() => {
-    if (user && user.activationToken) {
-      setIsActovationSnackbarOpen(true);
-    }
-
     if (user) {
       redirect("/files");
     }
-  }, [user, dispatch]);
+  }, [user]);
 
   return (
     <main>
       {!!loading && <Preloader />}
-
-      {!!user && !loading && (
-        <>
-          <Snackbar
-            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            open={isActovationSnackbarOpen}
-            onClose={() => setIsActovationSnackbarOpen(false)}
-          >
-            <Alert severity="error" sx={{ width: "100%" }}>
-              Your email has not yet been activated
-            </Alert>
-          </Snackbar>
-        </>
-      )}
 
       {!user && !loading && <Welcome />}
     </main>
