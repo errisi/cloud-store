@@ -5,6 +5,7 @@
   overflow: hidden;
   justify-content: center;
   text-align: center;
+  border: 1px solid transparent;
 
   &__icon {
     height: 44px;
@@ -43,11 +44,15 @@
   }
 
   &__share__icon {
+    all: unset;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
     position: absolute;
     top: 0;
     right: 0;
     margin: 0 auto;
     z-index: 2;
-    color: rgb(0, 179, 255);
+    color: rgba(255, 0, 115, 0.765);
   }
 }

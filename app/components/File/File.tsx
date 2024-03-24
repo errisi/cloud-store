@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "@mui/material";
+import { Alert, Button, IconButton, Snackbar } from "@mui/material";
 import FolderIcon from "@mui/icons-material/Folder";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import AudioFileIcon from "@mui/icons-material/AudioFile";
 import SensorsIcon from "@mui/icons-material/Sensors";
-import { Dispatch, FC, SetStateAction } from "react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
 import styles from "./File.module.scss";
 import { Files } from "@/app/models/file.model";
 import { Action } from "@/app/types/Actions";
@@ -179,14 +179,43 @@ export const File: FC<{
     }
   };
 
+  const [isPublicLinkCopied, setIsPublicLinkCopied] = useState(false);
+
+  const copyPublicLink = () => {
+    if (file.url) {
+      navigator.clipboard.writeText(
+        `${window.location.origin}/public/${file.url}`
+      );
+    }
+
+    setIsPublicLinkCopied(true);
+  };
+
   return (
     <>
       {!selectCondition && (
         <div className={styles.folder__wrapper}>
-          {file.url && !withoutIcon && <SensorsIcon className={styles.folder__share__icon} />}
+          {file.url && !withoutIcon && (
+            <IconButton
+              className={styles.folder__share__icon}
+              onClick={copyPublicLink}
+            >
+              <SensorsIcon />
+            </IconButton>
+          )}
           {displayCorrectFile(file)}
         </div>
       )}
+
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        open={isPublicLinkCopied}
+        onClose={() => setIsPublicLinkCopied(false)}
+      >
+        <Alert severity="success" sx={{ width: "100%" }}>
+          Public link has been copied
+        </Alert>
+      </Snackbar>
 
       {selectCondition && (
         <Button
@@ -202,7 +231,11 @@ export const File: FC<{
             textTransform: "none",
           }}
         >
-          {file.url && !withoutIcon && <SensorsIcon className={styles.folder__share__icon} />}
+          {file.url && !withoutIcon && (
+            <IconButton className={styles.folder__share__icon}>
+              <SensorsIcon />
+            </IconButton>
+          )}
           {displayCorrectFile(file, true)}
         </Button>
       )}

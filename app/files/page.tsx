@@ -51,6 +51,7 @@ export const Files = () => {
     useState(false);
   const [mediaFile, setMediaFile] = useState<FilesModel | null>(null);
   const [shareLink, setShareLink] = useState("");
+  const [isFolderForShare, setIsFolderForShare] = useState(false);
 
   const loading = userLoading || filesLoading;
 
@@ -132,6 +133,10 @@ export const Files = () => {
       )
     );
 
+    if (selectedFiles[0].type === "folder") {
+      setIsFolderForShare(true);
+    }
+
     setShareLink(publicUrl);
   };
 
@@ -162,6 +167,11 @@ export const Files = () => {
       default:
         break;
     }
+  };
+
+  const closeShareModal = () => {
+    setShareLink("");
+    setIsFolderForShare(false);
   };
 
   return (
@@ -213,15 +223,12 @@ export const Files = () => {
 
       {!!shareLink && (
         <>
-          <div
-            className={styles.share__close}
-            onClick={() => setShareLink("")}
-          />
+          <div className={styles.share__close} onClick={closeShareModal} />
           <div className={styles.share}>
             <div className={styles.share__header}>
               <h3>Public link:</h3>
               <IconButton
-                onClick={() => setShareLink("")}
+                onClick={closeShareModal}
                 className={styles.share__close_btn}
               >
                 <CloseIcon />
@@ -237,6 +244,12 @@ export const Files = () => {
                 <Button onClick={copyShareLink} variant="contained">
                   Copy Link
                 </Button>
+                {isFolderForShare && (
+                  <Alert severity="info">
+                    Only files will be visible in the public folder, other
+                    folders will not be visible.
+                  </Alert>
+                )}
               </>
             )}
 

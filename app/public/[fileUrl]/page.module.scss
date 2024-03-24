@@ -40,6 +40,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  &__active {
+    border-bottom: 1px solid #fff;
+    margin-bottom: 16px;
+    transform: border-bottom 2s;
+  }
 }
 
 .apply {

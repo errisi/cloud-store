@@ -70,7 +70,13 @@ const ResetPasswordPage = ({ params }: { params: Params }) => {
 
         <Search files={files} setFilteredFiles={setFilteredFiles} />
 
-        <div className={styles.actions}>
+        <div
+          className={
+            !action
+              ? styles.actions
+              : `${styles.actions} ${styles.actions__active}`
+          }
+        >
           <div />
           {!action && (
             <>
