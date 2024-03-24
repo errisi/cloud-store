@@ -23,21 +23,21 @@ export const Files = () => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const [path, setPath] = useState<string[]>(searchParams.getAll("path"));
+  const [path, setPath] = useState<string>(searchParams.get("path") || "/");
 
   const onPathChange = (title: string) => {
-    const newPath = path ? [...path, title] : [title];
+    const newPath = path === "/" ? `/${title}` : `${path}/${title}`;
     setPath(newPath);
-
-    router.push(`${pathname}?path=${newPath.join("/")}`);
+  
+    router.push(`${pathname}?path=${newPath}`);
   };
-
+  
   const onGoBack = () => {
-    const newPath = [...path];
-    newPath.pop();
-
-    setPath(newPath);
-    router.push(`${pathname}?path=${newPath.join("/")}`);
+    const newPath = path.split("/").slice(0, -1).join("/");
+    const newPathString = newPath || "/";
+    setPath(newPathString);
+  
+    router.push(`${pathname}?path=${newPathString}`);
   };
 
   const { user, loading: userLoading } = useAppSelector((state) => state.User);
@@ -65,10 +65,7 @@ export const Files = () => {
     if (!!user) {
       const setFilesFromServer = async () => {
         setFilesLoading(true);
-        const data = await filesService.get(
-          user.id,
-          path.length ? `${path.join("/")}` : "/"
-        );
+        const data = await filesService.get(user.id, path);
 
         const result = data as unknown as { folders: FilesModel[] };
 
@@ -89,11 +86,9 @@ export const Files = () => {
     const file = formData.get("file");
 
     if (file && user) {
-      const validPass = path.length ? `${path.join("/")}` : "/";
-
       const newFileFromServer = await filesService.fileUpload(
         file,
-        validPass,
+        path,
         user.id
       );
 

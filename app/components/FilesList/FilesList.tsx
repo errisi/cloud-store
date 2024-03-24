@@ -14,7 +14,7 @@ export const FilesList: FC<{
   action: Action | null;
   selectedFiles: Files[];
   setSelectedFiles: Dispatch<SetStateAction<Files[]>>;
-  path: string[];
+  path: string;
   ownerId: number | undefined;
   setFiles: Dispatch<SetStateAction<Files[]>>;
   selectCondition: boolean;
@@ -46,12 +46,10 @@ export const FilesList: FC<{
       return;
     }
 
-    const validPass = path.length ? `${path.join("/")}` : "/";
-
     try {
       const newFolderFromServer = await filesService.folderCreate(
         newFolderTitle,
-        validPass,
+        path,
         ownerId
       );
 

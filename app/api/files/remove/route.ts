@@ -13,10 +13,15 @@ export async function DELETE(req: Request) {
 
     const processFiles = async (files: Files[]) => {
       for (const currentFile of files) {
-        const path = currentFile.path !== '/' ? `${currentFile.path}/${currentFile.title}` : `${currentFile.title}`
+        const path = currentFile.path !== '/' ? `${currentFile.path}/${currentFile.title}` : '/' + currentFile.title;
         const ownerId = currentFile.ownerId;
 
-        const filesFromPath = await sequelize.models.Files.findAll({ where: { path, ownerId } }) as Files[];
+        console.log(path);
+
+        const filesFromPath =
+          await sequelize.models.Files.findAll({ where: { path, ownerId } }) as Files[];
+
+        console.log(filesFromPath)
 
         for (const file of filesFromPath) {
           if (file.type === 'folder') {
