@@ -40,7 +40,7 @@ export const Header = () => {
       <Container>
         <div className={styles.header__content}>
           <Link href="/">
-            <Image src="./logo.svg" alt="logo" width={44} height={44} />
+            <Image src="/logo.svg" alt="logo" width={44} height={44} />
           </Link>
           <nav className={styles.nav}>
             <ul className={styles.nav__list}>

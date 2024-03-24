@@ -37,4 +37,17 @@
       }
     }
   }
+
+  &__wrapper {
+    position: relative;
+  }
+
+  &__share__icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0 auto;
+    z-index: 2;
+    color: rgb(0, 179, 255);
+  }
 }

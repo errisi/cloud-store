@@ -1,3 +1,5 @@
+@import "../../styles/variables/sizes.scss";
+
 .header {
   background: rgba(0, 0, 0, 0.8);
   -webkit-backdrop-filter: blur(6.8px);
@@ -5,7 +7,7 @@
   transform: translateZ(0);
   backdrop-filter: saturate(180%) blur(5px);
   -webkit-tap-highlight-color: transparent;
-  height: 58px;
+  height: $header-height;
   display: flex;
   justify-content: center;
   align-items: center;

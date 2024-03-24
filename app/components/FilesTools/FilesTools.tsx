@@ -21,6 +21,7 @@ import { Files } from "@/app/models/file.model";
 import { NavigateBefore } from "@mui/icons-material";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Action } from "@/app/types/Actions";
+import { Search } from "./Search/Search";
 
 export const FilesTools: FC<{
   onGoBack: () => void;
@@ -30,6 +31,8 @@ export const FilesTools: FC<{
   setSelectedFiles: Dispatch<SetStateAction<Files[]>>;
   multiSelectCondition: boolean;
   upload: (formData: FormData) => Promise<void>;
+  files: Files[];
+  setFilteredFiles: Dispatch<SetStateAction<Files[]>>;
 }> = ({
   onGoBack,
   setAction,
@@ -38,6 +41,8 @@ export const FilesTools: FC<{
   setSelectedFiles,
   multiSelectCondition,
   upload,
+  files,
+  setFilteredFiles,
 }) => {
   const handleActionsClose = () => {
     setSelectedFiles([]);
@@ -46,18 +51,7 @@ export const FilesTools: FC<{
 
   return (
     <>
-      <FormControl size="small" fullWidth className={styles.header__search}>
-        <Input
-          id="standard-adornment-password"
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton>
-                <SearchIcon />
-              </IconButton>
-            </InputAdornment>
-          }
-        />
-      </FormControl>
+      <Search files={files} setFilteredFiles={setFilteredFiles} />
 
       <div className={styles.tools}>
         <Button startIcon={<ArrowBackIosNewIcon />} onClick={onGoBack} />

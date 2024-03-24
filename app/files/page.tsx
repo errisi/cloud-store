@@ -15,6 +15,8 @@ import { Container } from "../components/Container/Container";
 import { Preloader } from "../components/Preloader/Preloader";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { MediaList } from "../components/MediaList/MediaList";
+import CloseIcon from "@mui/icons-material/Close";
+import { displayValidAction } from "../utils/displayValidAction";
 
 export const Files = () => {
   const searchParams = useSearchParams();
@@ -42,11 +44,13 @@ export const Files = () => {
 
   const [files, setFiles] = useState<FilesModel[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<FilesModel[]>([]);
+  const [filteredFiles, setFilteredFiles] = useState<FilesModel[]>([]);
   const [action, setAction] = useState<Action | null>(null);
   const [filesLoading, setFilesLoading] = useState(false);
   const [isActovationSnackbarOpen, setIsActovationSnackbarOpen] =
     useState(false);
   const [mediaFile, setMediaFile] = useState<FilesModel | null>(null);
+  const [shareLink, setShareLink] = useState("");
 
   const loading = userLoading || filesLoading;
 
@@ -77,7 +81,7 @@ export const Files = () => {
     }
   }, [path, user]);
 
-  const multiSelectCondition =
+  const selectCondition =
     !!action && action !== Action.Add && action !== Action.Upload;
 
   const upload = async (formData: FormData) => {
@@ -106,6 +110,31 @@ export const Files = () => {
     setFiles((c) => c.filter((file) => !filesIds.includes(file.id)));
   };
 
+  const copyShareLink = () => {
+    navigator.clipboard.writeText(shareLink);
+  };
+
+  const isShareLinkValid = (link: string) =>
+    link.split("/")[link.split("/").length - 1] !== "null";
+
+  const toggleSelectedFileShare = async () => {
+    const publicUrl = (await filesService.setPublic(
+      selectedFiles[0].id
+    )) as unknown as string;
+
+    const validUrlValue = isShareLinkValid(publicUrl) ? publicUrl : null;
+
+    setFiles((currentFiles) =>
+      currentFiles.map((currentFile) =>
+        currentFile.id === selectedFiles[0].id
+          ? ({ ...currentFile, url: validUrlValue } as FilesModel)
+          : currentFile
+      )
+    );
+
+    setShareLink(publicUrl);
+  };
+
   const handleApply = () => {
     switch (action) {
       case Action.Delete:
@@ -122,13 +151,21 @@ export const Files = () => {
         }
         break;
 
+      case Action.Share:
+        if (selectedFiles[0]) {
+          toggleSelectedFileShare();
+          setSelectedFiles([]);
+          setAction(null);
+        }
+        break;
+
       default:
         break;
     }
   };
 
   return (
-    <>
+    <div className={styles.page}>
       {!loading && (
         <div className={styles.files}>
           <Container>
@@ -138,11 +175,13 @@ export const Files = () => {
               action={action}
               setAction={setAction}
               setSelectedFiles={setSelectedFiles}
-              multiSelectCondition={multiSelectCondition}
+              multiSelectCondition={selectCondition}
               upload={upload}
+              files={files}
+              setFilteredFiles={setFilteredFiles}
             />
             <FilesList
-              files={files}
+              files={filteredFiles}
               setFiles={setFiles}
               onPathChange={onPathChange}
               action={action}
@@ -150,14 +189,14 @@ export const Files = () => {
               setSelectedFiles={setSelectedFiles}
               path={path}
               ownerId={user?.id}
-              multiSelectCondition={multiSelectCondition}
+              selectCondition={selectCondition}
               setAction={setAction}
               setMediaFile={setMediaFile}
             />
 
-            <Collapse in={multiSelectCondition} className={styles.apply}>
+            <Collapse in={selectCondition} className={styles.apply}>
               <Button variant="contained" size="large" onClick={handleApply}>
-                {action}
+                {displayValidAction(action, selectedFiles[0])}
               </Button>
             </Collapse>
           </Container>
@@ -172,6 +211,42 @@ export const Files = () => {
         />
       )}
 
+      {!!shareLink && (
+        <>
+          <div
+            className={styles.share__close}
+            onClick={() => setShareLink("")}
+          />
+          <div className={styles.share}>
+            <div className={styles.share__header}>
+              <h3>Public link:</h3>
+              <IconButton
+                onClick={() => setShareLink("")}
+                className={styles.share__close_btn}
+              >
+                <CloseIcon />
+              </IconButton>
+            </div>
+            {isShareLinkValid(shareLink) && (
+              <>
+                <input
+                  onClick={copyShareLink}
+                  value={shareLink}
+                  className={styles.share__input}
+                />
+                <Button onClick={copyShareLink} variant="contained">
+                  Copy Link
+                </Button>
+              </>
+            )}
+
+            {!isShareLinkValid(shareLink) && (
+              <p>Successfully made non-public.</p>
+            )}
+          </div>
+        </>
+      )}
+
       <Snackbar
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         open={isActovationSnackbarOpen}
@@ -183,7 +258,7 @@ export const Files = () => {
       </Snackbar>
 
       {!!loading && <Preloader />}
-    </>
+    </div>
   );
 };
 

@@ -8,6 +8,14 @@ async function get(userId: number, path: string) {
   });
 }
 
+async function getPublic(fileUrl: string) {
+  return apiClient.get(`/files/share/${fileUrl}`);
+}
+
+async function setPublic(id: number) {
+  return apiClient.patch(`/files/share/${id}`);
+}
+
 async function folderCreate(title: string, path: string, ownerId: number) {
   return apiClient.post("/files/create-folder", { title, path, ownerId });
 }
@@ -37,4 +45,6 @@ export const filesService = {
   folderCreate,
   fileUpload,
   filesDelete,
+  getPublic,
+  setPublic,
 };

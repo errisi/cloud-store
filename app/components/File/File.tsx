@@ -4,6 +4,7 @@ import { Button } from "@mui/material";
 import FolderIcon from "@mui/icons-material/Folder";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import AudioFileIcon from "@mui/icons-material/AudioFile";
+import SensorsIcon from "@mui/icons-material/Sensors";
 import { Dispatch, FC, SetStateAction } from "react";
 import styles from "./File.module.scss";
 import { Files } from "@/app/models/file.model";
@@ -17,16 +18,18 @@ export const File: FC<{
   action: Action | null;
   selectedFiles: Files[];
   setSelectedFiles: Dispatch<SetStateAction<Files[]>>;
-  multiSelectCondition: boolean;
+  selectCondition: boolean;
   setMediaFile: Dispatch<SetStateAction<Files | null>>;
+  withoutIcon?: boolean;
 }> = ({
   file,
   onPathChange,
   action,
   selectedFiles,
   setSelectedFiles,
-  multiSelectCondition,
+  selectCondition,
   setMediaFile,
+  withoutIcon = false,
 }) => {
   const handleFileSelect = (file: Files) => {
     switch (action) {
@@ -39,6 +42,7 @@ export const File: FC<{
         break;
 
       case Action.Download:
+      case Action.Share:
         selectedFiles.includes(file)
           ? setSelectedFiles([])
           : setSelectedFiles([file]);
@@ -177,9 +181,14 @@ export const File: FC<{
 
   return (
     <>
-      {!multiSelectCondition && <>{displayCorrectFile(file)}</>}
+      {!selectCondition && (
+        <div className={styles.folder__wrapper}>
+          {file.url && !withoutIcon && <SensorsIcon className={styles.folder__share__icon} />}
+          {displayCorrectFile(file)}
+        </div>
+      )}
 
-      {multiSelectCondition && (
+      {selectCondition && (
         <Button
           size="large"
           onClick={() => handleFileSelect(file)}
@@ -193,6 +202,7 @@ export const File: FC<{
             textTransform: "none",
           }}
         >
+          {file.url && !withoutIcon && <SensorsIcon className={styles.folder__share__icon} />}
           {displayCorrectFile(file, true)}
         </Button>
       )}

@@ -17,7 +17,7 @@ export const FilesList: FC<{
   path: string[];
   ownerId: number | undefined;
   setFiles: Dispatch<SetStateAction<Files[]>>;
-  multiSelectCondition: boolean;
+  selectCondition: boolean;
   setAction: Dispatch<SetStateAction<Action | null>>;
   setMediaFile: Dispatch<SetStateAction<Files | null>>;
 }> = ({
@@ -30,7 +30,7 @@ export const FilesList: FC<{
   path,
   ownerId,
   setFiles,
-  multiSelectCondition,
+  selectCondition,
   setMediaFile,
 }) => {
   const [newFolderTitle, setNewFolderTitle] = useState("");
@@ -86,7 +86,7 @@ export const FilesList: FC<{
               action={action}
               selectedFiles={selectedFiles}
               setSelectedFiles={setSelectedFiles}
-              multiSelectCondition={multiSelectCondition}
+              selectCondition={selectCondition}
               setMediaFile={setMediaFile}
             />
           ))}
