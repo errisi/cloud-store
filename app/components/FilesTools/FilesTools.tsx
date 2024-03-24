@@ -53,7 +53,11 @@ export const FilesTools: FC<{
     <>
       <Search files={files} setFilteredFiles={setFilteredFiles} />
 
-      <div className={styles.tools}>
+      <div
+        className={
+          !multiSelectCondition ? styles.tools : `${styles.tools} ${styles.mb0}`
+        }
+      >
         <Button startIcon={<ArrowBackIosNewIcon />} onClick={onGoBack} />
 
         <div className={styles.actions}>

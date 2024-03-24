@@ -93,7 +93,7 @@ const ResetPasswordPage = ({ params }: { params: Params }) => {
             </>
           )}
           <Collapse in={!!action} sx={{ position: "absolute" }}>
-            <p>{`Selected ${selectedFiles.length} files`}</p>
+            <p className={styles.actions__text}>{`Selected ${selectedFiles.length} files`}</p>
           </Collapse>
         </div>
 
@@ -119,7 +119,17 @@ const ResetPasswordPage = ({ params }: { params: Params }) => {
             )}
           </div>
         </div>
-        <Collapse in={!!action} className={styles.apply}>
+
+        <Collapse
+          in={!!action}
+          className={styles.apply}
+          sx={{
+            "& .MuiCollapse-wrapper .MuiCollapse-wrapperInner": {
+              display: "flex",
+              "justify-content": "flex-end",
+            },
+          }}
+        >
           <Button variant="contained" size="large" onClick={download}>
             {Action.Download}
           </Button>

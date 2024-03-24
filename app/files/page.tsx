@@ -208,7 +208,16 @@ export const Files = () => {
               setMediaFile={setMediaFile}
             />
 
-            <Collapse in={selectCondition} className={styles.apply}>
+            <Collapse
+              in={selectCondition}
+              className={styles.apply}
+              sx={{
+                "& .MuiCollapse-wrapper .MuiCollapse-wrapperInner": {
+                  display: "flex",
+                  "justify-content": "flex-end",
+                },
+              }}
+            >
               <Button variant="contained" size="large" onClick={handleApply}>
                 {displayValidAction(action, selectedFiles[0])}
               </Button>

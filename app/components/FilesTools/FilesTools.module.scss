@@ -3,6 +3,8 @@
   justify-content: space-between;
   border-bottom: 1px solid #fff;
   align-items: center;
+  margin-bottom: 8px;
+  transition: margin-bottom 0.3s;
 }
 
 .upload {
@@ -11,6 +13,11 @@
 
 .mb16 {
   margin-bottom: 16px;
+  transition: margin-bottom 0.3s;
+}
+
+.mb0 {
+  margin-bottom: 0;
 }
 
 .pl16 {

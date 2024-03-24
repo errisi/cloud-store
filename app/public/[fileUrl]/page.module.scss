@@ -40,16 +40,21 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: margin-bottom 0.3s;
 
   &__active {
     border-bottom: 1px solid #fff;
     margin-bottom: 16px;
-    transform: border-bottom 2s;
+  }
+
+  &__text {
+    padding-left: 16px;
   }
 }
 
 .apply {
-  position: absolute;
+  position: sticky;
   bottom: 16px;
-  right: 12px;
+  z-index: 20;
+  padding: 0 20px;
 }
