@@ -43,6 +43,7 @@ export const File: FC<{
 
       case Action.Download:
       case Action.Share:
+      case Action.Move:
         selectedFiles.includes(file)
           ? setSelectedFiles([])
           : setSelectedFiles([file]);

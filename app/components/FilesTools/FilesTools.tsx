@@ -60,9 +60,9 @@ export const FilesTools: FC<{
           <IconButton onClick={() => setAction(Action.Add)}>
             <CreateNewFolderIcon />
           </IconButton>
-          {/* <IconButton onClick={() => setAction(Action.Move)}>
+          <IconButton onClick={() => setAction(Action.Move)}>
             <DriveFileMoveIcon />
-          </IconButton> */}
+          </IconButton>
           <form action={upload} className={styles.upload}>
             <input
               accept="image/*"

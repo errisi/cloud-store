@@ -17,6 +17,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { MediaList } from "../components/MediaList/MediaList";
 import CloseIcon from "@mui/icons-material/Close";
 import { displayValidAction } from "../utils/displayValidAction";
+import { MoveModal } from "../components/MoveModal/MoveModal";
 
 export const Files = () => {
   const searchParams = useSearchParams();
@@ -28,15 +29,15 @@ export const Files = () => {
   const onPathChange = (title: string) => {
     const newPath = path === "/" ? `/${title}` : `${path}/${title}`;
     setPath(newPath);
-  
+
     router.push(`${pathname}?path=${newPath}`);
   };
-  
+
   const onGoBack = () => {
     const newPath = path.split("/").slice(0, -1).join("/");
     const newPathString = newPath || "/";
     setPath(newPathString);
-  
+
     router.push(`${pathname}?path=${newPathString}`);
   };
 
@@ -52,6 +53,7 @@ export const Files = () => {
   const [mediaFile, setMediaFile] = useState<FilesModel | null>(null);
   const [shareLink, setShareLink] = useState("");
   const [isFolderForShare, setIsFolderForShare] = useState(false);
+  const [isMoveModalOpen, setIsMoveModalOpen] = useState(false);
 
   const loading = userLoading || filesLoading;
 
@@ -159,6 +161,13 @@ export const Files = () => {
         }
         break;
 
+      case Action.Move:
+        if (selectedFiles[0]) {
+          setIsMoveModalOpen(true);
+          setAction(null);
+        }
+        break;
+
       default:
         break;
     }
@@ -206,6 +215,17 @@ export const Files = () => {
             </Collapse>
           </Container>
         </div>
+      )}
+
+      {isMoveModalOpen && (
+        <MoveModal
+          file={selectedFiles[0]}
+          setSelectedFiles={setSelectedFiles}
+          user={user}
+          userLoading={userLoading}
+          setIsMoveModalOpen={setIsMoveModalOpen}
+          setCurrentFiles={setFiles}
+        />
       )}
 
       {!!mediaFile && (

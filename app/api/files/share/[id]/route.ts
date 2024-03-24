@@ -18,7 +18,7 @@ export async function GET(req: Request, { params }: any) {
   }
 
   if (file.type === 'folder') {
-    const path = file.path !== '/' ? `${file.path}/${file.title}` : `${file.title}`
+    const path = file.path !== '/' ? `${file.path}/${file.title}` : '/' + file.title;
 
     console.log(`PATH: ${path}`);
 

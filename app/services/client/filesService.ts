@@ -40,6 +40,12 @@ async function filesDelete(filesIds: number[]) {
   });
 }
 
+async function updatePath(id: number, path: string) {
+  return apiClient.patch(`/files/move/${id}`, {
+    path
+  });
+}
+
 export const filesService = {
   get,
   folderCreate,
@@ -47,4 +53,5 @@ export const filesService = {
   filesDelete,
   getPublic,
   setPublic,
+  updatePath,
 };
