@@ -1,3 +1,5 @@
+@import '../../styles/variables/colors.scss';
+
 .folder {
   flex-direction: column;
   width: 86px;
@@ -20,21 +22,21 @@
   }
 
   &__select {
-    background-color: #ffffff10;
-    border: 1px solid #ffffff80;
+    background-color: $dark-transparent-white-color;
+    border: 1px solid $light-transparent-white-color;
 
     &:hover,
     &:active {
-      background-color: #ffffff10;
+      background-color: $dark-transparent-white-color;
     }
 
     &__true {
-      background-color: #ffffff40;
-      border: 1px solid #ffffff80;
+      background-color: $transparent-white-color;
+      border: 1px solid $light-transparent-white-color;
 
       &:hover,
       &:active {
-        background-color: #ffffff40;
+        background-color: $transparent-white-color;
       }
     }
   }
@@ -53,6 +55,6 @@
     right: 0;
     margin: 0 auto;
     z-index: 2;
-    color: rgba(255, 0, 115, 0.765);
+    color: $main-pink-color;
   }
 }

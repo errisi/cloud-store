@@ -1,3 +1,5 @@
+@import '../styles/variables/colors.scss';
+
 .header {
   &__auth {
     margin: auto;
@@ -8,8 +10,8 @@
     align-items: center;
 
     &__error {
-      color:  #fff;
-      border: 1px solid  #fff;
+      color: $main-black-color;
+      border: 1px solid $main-black-color;
       padding: 0 8px;
       border-left: none;
       border-right: none;
@@ -27,7 +29,7 @@
       height: 200%;
       opacity: 50%;
       z-index: 59;
-      background-color: #000;
+      background-color: $main-black-color;
     }
 
     &__title {

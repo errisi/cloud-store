@@ -1,3 +1,5 @@
+@import '../../styles/variables/colors.scss';
+
 .list {
   display: flex;
   width: 100%;
@@ -43,7 +45,7 @@
 
   &__input {
     all: unset;
-    border: 1px solid #fff;
+    border: 1px solid $main-white-color;
     border-left: none;
     border-right: none;
     width: 100%;

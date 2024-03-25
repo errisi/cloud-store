@@ -1,9 +1,10 @@
 @import "../../styles/variables/sizes.scss";
+@import "../../styles/variables/colors.scss";
 
 .header {
-  background: rgba(0, 0, 0, 0.8);
+  background: $dark-transparent-black-color;
   -webkit-backdrop-filter: blur(6.8px);
-  box-shadow: inset 0 -1px 0 0 #555;
+  box-shadow: inset 0 -1px 0 0 $main-grey-color;
   transform: translateZ(0);
   backdrop-filter: saturate(180%) blur(5px);
   -webkit-tap-highlight-color: transparent;
@@ -33,9 +34,9 @@
 .settings {
   display: flex;
   flex-direction: column;
-  background: rgba(0, 0, 0, 0.8);
+  background: $dark-transparent-black-color;
   backdrop-filter: blur(6.8px);
-  box-shadow: inset 0 -1px 0 0 #555;
+  box-shadow: inset 0 -1px 0 0 $main-grey-color;
 
   &__close {
     position: fixed;
