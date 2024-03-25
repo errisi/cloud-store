@@ -179,7 +179,13 @@ export const Files = () => {
   };
 
   return (
-    <div className={styles.page}>
+    <div
+      className={
+        !loading 
+          ? styles.page
+          : styles.page__loading
+      }
+    >
       {!loading && (
         <div className={styles.files}>
           <Container>

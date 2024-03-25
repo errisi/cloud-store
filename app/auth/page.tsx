@@ -120,7 +120,7 @@ const Auth: FC = () => {
   };
 
   return (
-    <>
+    <div className={loading ? "loading" : ""}>
       {!loading && (
         <div className={styles.header__auth}>
           <form
@@ -210,7 +210,7 @@ const Auth: FC = () => {
       )}
 
       {!!loading && <Preloader />}
-    </>
+    </div>
   );
 };
 

@@ -64,7 +64,13 @@ const ResetPasswordPage = ({ params }: { params: Params }) => {
   };
 
   return (
-    <div className={styles.page}>
+    <div
+      className={
+        !filesLoading
+          ? styles.page
+          : styles.page__loading
+      }
+    >
       <Container>
         {!!filesLoading && <Preloader />}
 

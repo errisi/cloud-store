@@ -33,6 +33,12 @@
   justify-content: center;
   width: 100%;
   height: calc(100vh - $header-height);
+
+  &__loading {
+    max-width: 100vw;
+    height: 80vh;
+    overflow: hidden;
+  }
 }
 
 .actions {

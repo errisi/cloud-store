@@ -20,7 +20,7 @@ export default function Home() {
   }, [user]);
 
   return (
-    <main>
+    <main className={loading ? "loading" : ""}>
       {!!loading && <Preloader />}
 
       {!user && !loading && <Welcome />}
