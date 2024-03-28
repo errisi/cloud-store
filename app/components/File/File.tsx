@@ -185,7 +185,7 @@ export const File: FC<{
   const copyPublicLink = () => {
     if (file.url) {
       navigator.clipboard.writeText(
-        `${window.location.origin}/public/${file.url}`
+        `${process.env.NEXT_PUBLIC_CLIENT_URL}/public/${file.url}`
       );
     }
 

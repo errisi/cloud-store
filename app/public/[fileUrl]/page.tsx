@@ -18,32 +18,38 @@ import CloseIcon from "@mui/icons-material/Close";
 const ResetPasswordPage = ({ params }: { params: Params }) => {
   const [files, setFiles] = useState<Files[]>([]);
   const [filteredFiles, setFilteredFiles] = useState<Files[]>([]);
-  const [filesLoading, setFilesLoading] = useState(false);
+  const [filesLoading, setFilesLoading] = useState(true);
   const [action, setAction] = useState<Action | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<Files[]>([]);
   const [mediaFile, setMediaFile] = useState<Files | null>(null);
-
+  const [filesError, setFilesError] = useState("");
   const fileUrl = params.fileUrl;
 
   useEffect(() => {
     const setFilesFromServer = async () => {
       setFilesLoading(true);
+      setFilesError("");
+      try {
+        const result = (await filesService.getPublic(
+          fileUrl
+        )) as unknown as Files[];
 
-      const result = (await filesService.getPublic(
-        fileUrl
-      )) as unknown as Files[];
+        const filesFromServer = result as unknown as { folders: Files[] };
 
-      const filesFromServer = result as unknown as { folders: Files[] };
+        const { folders } = filesFromServer;
 
-      const { folders } = filesFromServer;
+        console.log(result);
 
-      console.log(result);
-
-      setFiles(
-        [...folders]
-          .sort((a, b) => a.title.localeCompare(b.title))
-          .filter((currentFile) => currentFile.type !== "folder")
-      );
+        setFiles(
+          [...folders]
+            .sort((a, b) => a.title.localeCompare(b.title))
+            .filter((currentFile) => currentFile.type !== "folder")
+        );
+      } catch (error) {
+        setFilesError(
+          `Something went wrong, this is what our server says: ${error}`
+        );
+      }
       setFilesLoading(false);
     };
 
@@ -64,16 +70,9 @@ const ResetPasswordPage = ({ params }: { params: Params }) => {
   };
 
   return (
-    <div
-      className={
-        !filesLoading
-          ? styles.page
-          : styles.page__loading
-      }
-    >
+    <div className={!filesLoading ? styles.page : styles.page__loading}>
+      {!!filesLoading && <Preloader />}
       <Container>
-        {!!filesLoading && <Preloader />}
-
         <Search files={files} setFilteredFiles={setFilteredFiles} />
 
         <div
@@ -84,7 +83,7 @@ const ResetPasswordPage = ({ params }: { params: Params }) => {
           }
         >
           <div />
-          {!action && (
+          {!action && !filesError && (
             <>
               <IconButton onClick={() => setAction(Action.Download)}>
                 <DownloadIcon />
@@ -99,7 +98,9 @@ const ResetPasswordPage = ({ params }: { params: Params }) => {
             </>
           )}
           <Collapse in={!!action} sx={{ position: "absolute" }}>
-            <p className={styles.actions__text}>{`Selected ${selectedFiles.length} files`}</p>
+            <p
+              className={styles.actions__text}
+            >{`Selected ${selectedFiles.length} files`}</p>
           </Collapse>
         </div>
 
@@ -120,11 +121,12 @@ const ResetPasswordPage = ({ params }: { params: Params }) => {
                 />
               ))}
 
-            {!filteredFiles.length && !filesLoading && (
+            {!filteredFiles.length && !filesLoading && !filesError && (
               <p className={styles.list__empty}>It&apos;s empty here for now</p>
             )}
           </div>
         </div>
+        {!files.length && !filesLoading && filesError && <p>{filesError}</p>}
 
         <Collapse
           in={!!action}

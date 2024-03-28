@@ -62,5 +62,5 @@ export async function PATCH(req: Request, { params }: any) {
 
   console.log(file);
 
-  return NextResponse.json(`${process.env.CLIENT_URL}/public/${file.url}`);
+  return NextResponse.json(`${process.env.NEXT_PUBLIC_CLIENT_URL}/public/${file.url}`);
 }
