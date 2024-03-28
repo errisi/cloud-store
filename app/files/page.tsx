@@ -19,7 +19,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { displayValidAction } from "../utils/displayValidAction";
 import { MoveModal } from "../components/MoveModal/MoveModal";
 
-export const Files = () => {
+const Files = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
