@@ -3,7 +3,7 @@ import { File } from "../File/File";
 import styles from "./FilesList.module.scss";
 import { Files } from "@/app/models/file.model";
 import { Action } from "@/app/types/Actions";
-import { Alert, Button, IconButton, Snackbar } from "@mui/material";
+import { Alert, Button, Collapse, IconButton, Snackbar } from "@mui/material";
 import FolderIcon from "@mui/icons-material/Folder";
 import { filesService } from "@/app/services/client/filesService";
 import CloseIcon from "@mui/icons-material/Close";
@@ -89,32 +89,43 @@ export const FilesList: FC<{
             />
           ))}
 
-        {!files.length && (
+        {!files.length && !action && (
           <p className={styles.list__empty}>It&apos;s empty here for now</p>
         )}
 
         {action === Action.Add && (
           <form
-            className={styles.folder}
+            className={styles.add_form}
             onSubmit={(e) =>
               !isNewFolderLoading ? onAddFolderSubmit(e) : e.preventDefault()
             }
           >
-            <IconButton
-              className={styles.folder__cancel}
-              onClick={onAddFolderCancel}
+            <div className={styles.folder}>
+              <IconButton
+                className={styles.folder__cancel}
+                onClick={onAddFolderCancel}
+                disabled={isNewFolderLoading}
+              >
+                <CloseIcon />
+              </IconButton>
+              <FolderIcon className={styles.folder__icon} />
+              <input
+                disabled={isNewFolderLoading}
+                type="text"
+                className={styles.folder__input}
+                value={newFolderTitle}
+                onChange={(e) => setNewFolderTitle(e.target.value)}
+              />
+            </div>
+
+            <Button
+              variant="contained"
+              className={styles.add_form__apply}
+              type="submit"
               disabled={isNewFolderLoading}
             >
-              <CloseIcon />
-            </IconButton>
-            <FolderIcon className={styles.folder__icon} />
-            <input
-              disabled={isNewFolderLoading}
-              type="text"
-              className={styles.folder__input}
-              value={newFolderTitle}
-              onChange={(e) => setNewFolderTitle(e.target.value)}
-            />
+              {action}
+            </Button>
           </form>
         )}
       </div>

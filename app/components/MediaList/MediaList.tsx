@@ -85,20 +85,24 @@ export const MediaList: FC<{
           ))}
         </Swiper>
 
-        <Button
-          onClick={handleBack}
-          variant="text"
-          className={styles.buttons__back}
-        >
-          <ArrowBackIosNewIcon color="primary" />
-        </Button>
-        <Button
-          className={styles.buttons__forward}
-          onClick={handleForward}
-          variant="text"
-        >
-          <ArrowForwardIosIcon color="primary" />
-        </Button>
+        {mediaFiles.length > 1 && (
+          <>
+            <Button
+              onClick={handleBack}
+              variant="text"
+              className={styles.buttons__back}
+            >
+              <ArrowBackIosNewIcon color="primary" />
+            </Button>
+            <Button
+              className={styles.buttons__forward}
+              onClick={handleForward}
+              variant="text"
+            >
+              <ArrowForwardIosIcon color="primary" />
+            </Button>
+          </>
+        )}
       </div>
     </>
   );

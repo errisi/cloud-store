@@ -42,5 +42,10 @@
   {
     "email": "999@gmail.com",
     "password": "1111"
+  },
+  {
+    "email": "test@example.com",
+    "password": "TESTpass123",
+    "activationToken": null
   }
 ]

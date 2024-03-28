@@ -47,7 +47,8 @@ const Auth: FC = () => {
       setRegisterError("");
       push("/");
     } catch (error) {
-      setRegisterError(`${(error as any).response.data.message}`);
+      console.log((error as any).response.data.error);
+      setRegisterError((error as any).response.data.error);
     }
   };
 
@@ -133,6 +134,9 @@ const Auth: FC = () => {
                 Wrong login or password
               </p>
             )}
+            {!!registerError && (
+              <p className={styles.header__auth__error}>{registerError}</p>
+            )}
             <div className={styles.header__auth__content}>
               <TextField
                 required
@@ -189,6 +193,7 @@ const Auth: FC = () => {
               fullWidth
               className={styles.header__auth__content__buttons}
               size="medium"
+              disabled={loading}
             >
               <Button
                 variant="outlined"

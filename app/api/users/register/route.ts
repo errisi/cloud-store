@@ -30,6 +30,15 @@ export async function POST(req: Request) {
     );
   }
 
+  const user = await sequelize.models.Users.findOne({ where: { email } })
+
+  if (user) {
+    return NextResponse.json(
+      { error: "User with this email already exists" },
+      { status: 409 }
+    );
+  }
+
   const activationToken = uuid();
   const hashedPass = await bcrypt.hash(password, 10);
 

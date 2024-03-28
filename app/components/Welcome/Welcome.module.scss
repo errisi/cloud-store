@@ -7,6 +7,7 @@
   padding: 10px;
   gap: 20px;
   width: 100vw;
+  margin-bottom: 80px;
 
   &__section {
     display: grid;
@@ -95,5 +96,53 @@
     top: $header-height;
     z-index: -1;
     transform: translate3d(0, 0, -100vmin);
+  }
+}
+
+.footer {
+  height: 240px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.6rem;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    max-width: 760px;
+    padding: 0 20px;
+    gap: 12px;
+
+    @media (min-width: 555px) {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  &__copyright {
+    text-align: center;
+    color: #999;
+
+    @media (min-width: 555px) {
+      align-self: flex-end;
+      margin: 4px 0;
+    }
+  }
+
+  &__test {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 226px;
+
+    &__button {
+      width: 100%;
+      max-width: 226px;
+    }
   }
 }
