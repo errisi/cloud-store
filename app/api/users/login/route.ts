@@ -2,7 +2,7 @@ import { connectToDb } from "@/app/db_connection";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { Users } from "@/app/models/user.model";
-import { generateTokens } from "../route";
+import { generateTokens } from "@/app/utils/generateTokens";
 
 export async function POST(req: Request) {
   const { email, password } = await req.json();
